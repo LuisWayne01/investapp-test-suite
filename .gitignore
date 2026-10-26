@@ -1,5 +1,15 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
-*
-# Arquivos que contem senhas e credenciais sensiveis
+# Ambientes virtuais
+.venv/
+venv/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Cobertura de testes
+.coverage
+htmlcov/
+
+# Credenciais sensíveis
 .env
-.vscode/launch.json
