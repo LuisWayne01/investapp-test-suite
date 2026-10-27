@@ -1,7 +1,37 @@
-
 import requests
 
+YIELD_MONTHLY_URL = "/api/simulate/yield-monthly"
 
+
+# ===== Integrante 5: simulação de rendimento mensal =====
+def test_yield_monthly_sucesso(base_url, auth_headers):
+    """Simulação válida retorna 200 e corpo com resultado."""
+    payload = {
+        # TODO: preencher com os campos do Request body do Swagger
+    }
+    response = requests.post(
+        f"{base_url}{YIELD_MONTHLY_URL}",
+        json=payload,
+        headers=auth_headers,
+        timeout=30,
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    print(data)
+    assert data  # TODO: validar campos específicos da resposta
+
+
+def test_yield_monthly_sem_autenticacao(base_url):
+    """Sem token, a API deve recusar a requisição (401 ou 403)."""
+    response = requests.post(
+        f"{base_url}{YIELD_MONTHLY_URL}",
+        json={},
+        timeout=30,
+    )
+    assert response.status_code in (401, 403), response.text
+
+
+# ===== Integrante 6: simulação de Resgate Otimizado Tributariamente =====
 def test_simulacao_resgate_otimizado_tributariamente(base_url, auth_headers):
     """Testa a simulação de resgate com otimização tributária."""
 
