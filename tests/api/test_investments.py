@@ -6,8 +6,6 @@ from pathlib import Path
 import pytest
 import requests
 
-import requests
-
 
 def test_criar_investimento_valido(base_url, auth_headers):
     """Valida a criação de um investimento com dados válidos."""
