@@ -7,6 +7,38 @@ import pytest
 import requests
 
 
+def test_criar_investimento_valido(base_url, auth_headers):
+    """Valida a criação de um investimento com dados válidos."""
+
+    payload = {
+        "asset_name": "CDB",
+        "amount": 1500.00,
+        "purchase_price": 1.00,
+        "days_invested": 30,
+        "planned_days": 365,
+    }
+
+    response = requests.post(
+        f"{base_url}/api/investments",
+        json=payload,
+        headers=auth_headers,
+        timeout=15,
+    )
+
+    assert response.status_code == 201, (
+        f"Esperado HTTP 201, mas a API retornou "
+        f"{response.status_code}: {response.text}"
+    )
+
+    data = response.json()
+
+    assert isinstance(data, dict)
+    assert data["asset_name"] == payload["asset_name"]
+    assert float(data["amount"]) == payload["amount"]
+    assert float(data["purchase_price"]) == payload["purchase_price"]
+    assert data["days_invested"] == payload["days_invested"]
+    assert data["planned_days"] == payload["planned_days"]
+    
 def test_listar_investimentos(base_url, auth_headers):
     """Testa a listagem de investimentos do usuário."""
     response = requests.get(
