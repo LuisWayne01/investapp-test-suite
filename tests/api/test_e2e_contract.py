@@ -52,17 +52,16 @@ def test_fluxo_completo_ciclo_de_vida_investimento(base_url, auth_headers):
         ), f"O investimento ID {investment_id} não foi encontrado na listagem."
 
         # 3. Executar chamada no módulo de simulação
-        payload_simular = {
-            "asset_name": "CDB",
-            "amount": 1000.00,
-            "months": 12,
-        }
+        payload_simular = {"months": 12}
         res_simular = requests.post(
-            f"{base_url}/api/simulations/yield-monthly",
+            f"{base_url}/api/simulate/yield-monthly",
             json=payload_simular,
             headers=auth_headers,
         )
-        assert res_simular.status_code in [200, 201, 404]
+        assert res_simular.status_code == 200, (
+            f"Falha na simulação: HTTP {res_simular.status_code} - "
+            f"{res_simular.text}"
+        )
 
     finally:
         # 4. Limpeza (Teardown) - Excluir o investimento criado

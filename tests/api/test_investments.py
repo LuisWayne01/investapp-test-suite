@@ -1,5 +1,3 @@
-
-
 import csv
 from pathlib import Path
 
@@ -38,7 +36,15 @@ def test_criar_investimento_valido(base_url, auth_headers):
     assert float(data["purchase_price"]) == payload["purchase_price"]
     assert data["days_invested"] == payload["days_invested"]
     assert data["planned_days"] == payload["planned_days"]
-    
+
+    # Limpeza: remove o investimento criado para não acumular dados
+    requests.delete(
+        f"{base_url}/api/investments/{data['id']}",
+        headers=auth_headers,
+        timeout=15,
+    )
+
+
 def test_listar_investimentos(base_url, auth_headers):
     """Testa a listagem de investimentos do usuário."""
     response = requests.get(
@@ -48,7 +54,6 @@ def test_listar_investimentos(base_url, auth_headers):
 
     assert response.status_code == 200
     assert isinstance(response.json(), list)
-
 
 
 def test_excluir_investimento(base_url, auth_headers):
@@ -81,6 +86,7 @@ def test_excluir_investimento(base_url, auth_headers):
     )
 
     assert resposta.status_code == 200
+
 
 def carregar_dados_investimentos_csv():
     """Le dinamicamente o arquivo CSV em tests/data/dados_investimentos.csv."""
@@ -130,4 +136,11 @@ def test_criar_investimentos_ddt_csv(
         f"{base_url}/api/investments", json=payload, headers=auth_headers
     )
 
-    assert response.status_code == status_esperado
+    assert response.status_code == status_esperado, response.text
+
+    # Limpeza: remove o investimento criado para não acumular dados
+    if response.status_code == 201:
+        requests.delete(
+            f"{base_url}/api/investments/{response.json()['id']}",
+            headers=auth_headers,
+        )

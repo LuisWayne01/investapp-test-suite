@@ -13,3 +13,6 @@ htmlcov/
 
 # Credenciais sensíveis
 .env
+
+# Configuração local de debug (contém credenciais)
+.vscode/launch.json
